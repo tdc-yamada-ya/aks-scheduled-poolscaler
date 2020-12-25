@@ -1,0 +1,11 @@
+{
+  "Name": "Azure Kubernetes Agent Pool Operator Role",
+  "IsCustom": true,
+  "Description": "Can modify agent pool of Kubernetes.",
+  "Actions": [
+    "Microsoft.ContainerService/managedClusters/agentPools/read",
+    "Microsoft.ContainerService/managedClusters/agentPools/write"
+  ],
+  "NotActions": [],
+  "AssignableScopes": ["/subscriptions/subscriptionID"]
+}

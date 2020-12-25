@@ -1,0 +1,54 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: aks-scheduled-poolscaler-cronjob
+spec:
+  schedule: "*/10 * * * *"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      ttlSecondsAfterFinished: 10
+      backoffLimit: 1
+      template:
+        spec:
+          containers:
+            - name: aks-scheduled-poolscaler
+              image: ghcr.io/tdc-yamada-ya/aks-scheduled-poolscaler:main
+              imagePullPolicy: Always
+              env:
+                - name: AZURE_TENANT_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: aks-scheduled-poolscaler-client-credentials
+                      key: tenantid
+                - name: AZURE_SUBSCRIPTION_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: aks-scheduled-poolscaler-client-credentials
+                      key: subscriptionid
+                - name: AZURE_CLIENT_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: aks-scheduled-poolscaler-client-credentials
+                      key: clientid
+                - name: AZURE_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: aks-scheduled-poolscaler-client-credentials
+                      key: clientsecret
+                - name: CONFIGURATION_FILE
+                  value: "/tmp/configuration.yml"
+                - name: TZ
+                  value: Asia/Tokyo
+              volumeMounts:
+                - name: configuration
+                  mountPath: "/tmp"
+                  readOnly: true
+          volumes:
+            - name: configuration
+              configMap:
+                name: aks-scheduled-poolscaler-config
+          imagePullSecrets:
+            - name: aks-scheduled-poolscaler-image-pull-credentials
+          restartPolicy: OnFailure

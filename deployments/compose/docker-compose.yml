@@ -1,0 +1,13 @@
+version: "3"
+services:
+  aks-scheduled-poolscaler:
+    image: ghcr.io/tdc-yamada-ya/aks-scheduled-poolscaler:main
+    environment:
+      - AZURE_TENANT_ID
+      - AZURE_CLIENT_ID
+      - AZURE_CLIENT_SECRET
+      - AZURE_SUBSCRIPTION_ID
+      - CONFIGURATION_FILE=/tmp/configuration.yml
+      - TZ=Asia/Tokyo
+    volumes:
+      - "./configuration.yml:/tmp/configuration.yml:ro"

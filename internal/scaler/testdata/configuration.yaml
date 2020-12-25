@@ -1,0 +1,31 @@
+paramsDefs:
+  p1:
+    enableAutoScaling: false
+    count: 0
+    minCount: 0
+    maxCount: 0
+  p2:
+    enableAutoScaling: true
+  p3:
+    count: 1
+  p4:
+    minCount: 1
+  p5:
+    maxCount: 1
+resources:
+  - resourceGroupName: rgn1
+    resourceName: rn1
+    agentPoolName: apn1
+    rules:
+      - expr: "0 0 1 Jan 2021 Fri"
+        paramsRef: p1
+      - expr: "* * * * * *"
+        paramsRef: p2
+  - resourceGroupName: rgn2
+    resourceName: rn2
+    agentPoolName: apn2
+    rules:
+      - expr: "0 0 1 Jan 2021 Fri"
+        paramsRef: p1
+      - expr: "* * * * * *"
+        paramsRef: p2
